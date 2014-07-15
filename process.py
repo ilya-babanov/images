@@ -14,31 +14,34 @@ def sinc(x):
     return math.sin(x)/x
 
 def imgFilter(x, a):
-    if x==0:
+    if x == 0:
         return 1
     else:
-        return sinc(pi*x)*sinc(pi*x/a)
+        x = pi*x
+        return (math.sin(x)/x)*(math.sin(x/a)*a/x)
+        #return sinc(pi*x)*sinc(pi*x/a)
 
 def process(original, width, height, a):
-    resultArr = np.zeros((width*2, height*2), dtype='uint8')
+    resultArr = np.zeros((height*2, width*2), dtype='uint8')
+    #it = np.nditer(resultArr, flags=['multi_index'], op_flags=['readwrite'])
+    #while not it.finished:
+        #i = it.multi_index[0]
+        #j = it.multi_index[1]
+        #if i%2 == 0 and j%2 == 0:
+            #it[0] = original[i/2][j/2]
+        #else:
+            #it[0] = 222
+        #it.iternext()
+
+    #newImg = Image.fromarray(resultArr, 'L')
+    #newImg.show()
+
     it = np.nditer(resultArr, flags=['multi_index'], op_flags=['readwrite'])
     while not it.finished:
         i = it.multi_index[0]
         j = it.multi_index[1]
         if i%2 == 0 and j%2 == 0:
             it[0] = original[i/2][j/2]
-        else:
-            it[0] = 222
-        it.iternext()
-
-    newImg = Image.fromarray(resultArr, 'L')
-    newImg.show()
-
-    it = np.nditer(resultArr, flags=['multi_index'], op_flags=['readwrite'])
-    while not it.finished:
-        i = it.multi_index[0]
-        j = it.multi_index[1]
-        if i%2 == 0 and j%2 == 0:
             it.iternext()
             continue
         i2 = i/2.
@@ -62,7 +65,7 @@ def process(original, width, height, a):
         elif result < 0:
             it[0] = 0
         else:
-            it[0] = int(math.ceil(result))
+            it[0] = int(result)
 
         it.iternext()
 
@@ -80,12 +83,10 @@ def main():
     newImg = Image.fromarray(originalArr, 'L')
     newImg.show()
 
-    resultArr = process(originalArr, width, height, 3)
-    #resultArr = process(resultArr.copy(), width, height, 3)
-    #for i in range(0,3):
-        #resultArr = process(resultArr.copy(), width*2, height*2, 3)
+    resultArr = process(originalArr, width, height, 4)
+    resultArr2 = process(resultArr, width*2, height*2, 4)
 
-    newImg = Image.fromarray(resultArr, 'L')
+    newImg = Image.fromarray(resultArr2, 'L')
     newImg.show()
 
 
