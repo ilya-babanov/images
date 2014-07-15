@@ -28,7 +28,7 @@ def process(original, width, height, a):
         if i%2 == 0 and j%2 == 0:
             it[0] = original[i/2][j/2]
         else:
-            it[0] = 190
+            it[0] = 222
         it.iternext()
 
     newImg = Image.fromarray(resultArr, 'L')
@@ -57,15 +57,20 @@ def process(original, width, height, a):
                 col += 1
             row += 1
 
-        it[0] = int(math.ceil(result))
-        #print 'res', it[0], i2, j2
+        if result > 255:
+            it[0] = 255
+        elif result < 0:
+            it[0] = 0
+        else:
+            it[0] = int(math.ceil(result))
+
         it.iternext()
 
     return resultArr
 
 
 def main():
-    img = Image.open('img/cat.png').convert('L')
+    img = Image.open('img/cat-band.png').convert('L')
     width = img.size[0]
     height = img.size[1]
     print 'image size:', width, height
