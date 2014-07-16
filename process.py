@@ -1,6 +1,6 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import random
+#import matplotlib.pyplot as plt
+#import random
 import math
 from PIL import Image
 from scipy import special, optimize, constants
@@ -21,8 +21,11 @@ def imgFilter(x, a):
         return (math.sin(x)/x)*(math.sin(x/a)*a/x)
         #return sinc(pi*x)*sinc(pi*x/a)
 
-def process(original, width, height, a):
+def process(original, a):
+    width = original.shape[1]
+    height = original.shape[0]
     resultArr = np.zeros((height*2, width*2), dtype='uint8')
+
     #it = np.nditer(resultArr, flags=['multi_index'], op_flags=['readwrite'])
     #while not it.finished:
         #i = it.multi_index[0]
@@ -73,22 +76,27 @@ def process(original, width, height, a):
 
 
 def main():
-    img = Image.open('img/cat-band.png').convert('L')
+    #img = Image.open('img/cat-band.png').convert('L')
+    img = Image.open('img/weather.png').convert('L')
+    #img = Image.open('img/text.jpg').convert('L')
+
     width = img.size[0]
     height = img.size[1]
     print 'image size:', width, height
 
-    originalArr = np.array(np.uint8(img))
+    imageArray = np.array(np.uint8(img))
 
-    newImg = Image.fromarray(originalArr, 'L')
+    newImg = Image.fromarray(imageArray, 'L')
     newImg.show()
 
-    resultArr = process(originalArr, width, height, 4)
-    resultArr2 = process(resultArr, width*2, height*2, 4)
+    imageArray = process(imageArray, 4)
+    imageArray = process(imageArray, 4)
+    #imageArray = process(imageArray, 4)
 
-    newImg = Image.fromarray(resultArr2, 'L')
+    newImg = Image.fromarray(imageArray, 'L')
     newImg.show()
 
 
 if __name__ == "__main__":
     main()
+
